@@ -1,6 +1,6 @@
-use sigmaos_activeandroid::Component;
+use sigmaos_activeandroid::OrmDatabase;
 
 #[test]
 fn component_constructs() {
-    let _c = Component::new();
+    let _c = OrmDatabase::new("Test Database");
 }
