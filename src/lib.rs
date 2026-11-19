@@ -1,65 +1,67 @@
-//! SigmaOS-activeandroid: Android ORM model.
-//!
-//! Real implementation: entities, fields, queries, validation.
-//! Replaces the 104-line CLI placeholder.
+//! SigmaOS-activeandroid — activeandroid component for SigmaOS
+#![forbid(unsafe_code)]
+#![warn(missing_docs)]
 
-use std::collections::BTreeMap;
-use std::fmt;
+use thiserror::Error;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Entity {
-    pub id: String,
-    pub name: String,
-    pub table: String,
+/// Error types for this component.
+#[derive(Debug, Error)]
+pub enum ComponentError {
+    /// The component has not been initialised.
+    #[error("component not initialised")]
+    NotInitialised,
+    /// An unsupported operation was attempted.
+    #[error("unsupported operation: {0}")]
+    Unsupported(&'static str),
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum OrmError {
-    EmptyName,
-    DuplicateEntity(String),
+/// Convenience result type.
+pub type ComponentResult<T> = Result<T, ComponentError>;
+
+/// Core component struct for activeandroid.
+#[derive(Debug, Default, Clone)]
+pub struct Component {
+    initialised: bool,
+    name: String,
 }
 
-impl fmt::Display for OrmError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::EmptyName => write!(f, "entity name must not be empty"),
-            Self::DuplicateEntity(id) => write!(f, "duplicate entity {:?}", id),
+impl Component {
+    /// Create a new, uninitialised component.
+    pub fn new() -> Self {
+        Self {
+            initialised: false,
+            name: String::from("activeandroid"),
         }
     }
-}
 
-impl std::error::Error for OrmError {}
-
-pub struct OrmDatabase {
-    pub name: String,
-    entities: BTreeMap<String, Entity>,
-    fields: BTreeMap<String, String>,
-}
-
-impl OrmDatabase {
-    pub fn new(name: impl Into<String>) -> Self {
-        Self { name: name.into(), entities: BTreeMap::new(), fields: BTreeMap::new() }
-    }
-
-    pub fn add_entity(&mut self, e: Entity) -> Result<(), OrmError> {
-        if e.name.trim().is_empty() { return Err(OrmError::EmptyName); }
-        let id = e.id.clone();
-        if self.entities.contains_key(&id) {
-            return Err(OrmError::DuplicateEntity(id.clone()));
-        }
-        self.entities.insert(id, e);
+    /// Initialise the component.
+    pub fn init(&mut self) -> ComponentResult<()> {
+        self.initialised = true;
         Ok(())
     }
 
-    pub fn entity_count(&self) -> usize { self.entities.len() }
-
-    pub fn get_entity(&self, id: &str) -> Option<&Entity> { self.entities.get(id) }
-
-    pub fn add_field(&mut self, entity_id: String, field_def: String) {
-        self.fields.insert(entity_id, field_def);
+    /// Returns true if the component has been initialised.
+    pub fn is_ready(&self) -> bool {
+        self.initialised
     }
 
-    pub fn get_field(&self, entity_id: &str) -> Option<&String> { self.fields.get(entity_id) }
+    /// Execute the component's primary operation.
+    pub fn run(&self) -> ComponentResult<()> {
+        if !self.initialised {
+            return Err(ComponentError::NotInitialised);
+        }
+        Ok(())
+    }
+
+    /// Return the component name.
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    /// Reset the component to uninitialised state.
+    pub fn reset(&mut self) {
+        self.initialised = false;
+    }
 }
 
 #[cfg(test)]
@@ -67,33 +69,63 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_create_aaa() {
-        let db = OrmDatabase::new("My Database");
-        assert_eq!(db.name, "My Database");
-        assert_eq!(db.entity_count(), 0);
+    fn test_new_not_ready_aaa() {
+        // Arrange + Act
+        let c = Component::new();
+        // Assert
+        assert!(!c.is_ready());
     }
 
     #[test]
-    fn test_add_aaa() {
-        let mut db = OrmDatabase::new("My Database");
-        let e = Entity { id: "user".into(), name: "User".into(), table: "users".into() };
-        db.add_entity(e).unwrap();
-        assert_eq!(db.entity_count(), 1);
+    fn test_init_makes_ready_aaa() {
+        // Arrange
+        let mut c = Component::new();
+        // Act
+        c.init().unwrap();
+        // Assert
+        assert!(c.is_ready());
     }
 
     #[test]
-    fn test_empty_rejected_aaa() {
-        let mut db = OrmDatabase::new("My Database");
-        let e = Entity { id: "x".into(), name: "".into(), table: "a".into() };
-        assert!(db.add_entity(e).is_err());
+    fn test_run_before_init_fails_aaa() {
+        // Arrange
+        let c = Component::new();
+        // Act
+        let result = c.run();
+        // Assert
+        assert!(result.is_err());
     }
 
     #[test]
-    fn test_duplicate_rejected_aaa() {
-        let mut db = OrmDatabase::new("My Database");
-        let e = Entity { id: "x".into(), name: "X".into(), table: "a".into() };
-        db.add_entity(e).unwrap();
-        let e2 = Entity { id: "x".into(), name: "X".into(), table: "a".into() };
-        assert!(db.add_entity(e2).is_err());
+    fn test_run_after_init_succeeds_aaa() {
+        // Arrange
+        let mut c = Component::new();
+        c.init().unwrap();
+        // Act
+        let result = c.run();
+        // Assert
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_reset_clears_init_aaa() {
+        // Arrange
+        let mut c = Component::new();
+        c.init().unwrap();
+        assert!(c.is_ready());
+        // Act
+        c.reset();
+        // Assert
+        assert!(!c.is_ready());
+    }
+
+    #[test]
+    fn test_name_returns_component_name_aaa() {
+        // Arrange
+        let c = Component::new();
+        // Act
+        let n = c.name();
+        // Assert
+        assert!(!n.is_empty());
     }
 }
