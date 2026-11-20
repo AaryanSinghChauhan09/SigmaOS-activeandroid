@@ -1,63 +1,50 @@
-# SigmaOS-activeandroid Component Wiki
+# SigmaOS-SigmaOS-activeandroid Component Wiki
 
 ## Overview
-SigmaOS-activeandroid provides Android compatibility layer for the SigmaOS operating system. It demonstrates the Android runtime integration and application compatibility within the SigmaOS ecosystem, following the principles of clear abstraction and deterministic Android initialization.
+SigmaOS-SigmaOS-activeandroid provides This repository is currently a minimal no_std component identity scaffold. Its library exposes a Component named SigmaOS-activeandroid. for the SigmaOS operating system. It demonstrates the subsystem and integration within the SigmaOS ecosystem, following the principles of clear abstraction and deterministic initialization.
 
 ## Principles
 - Single Responsibility
-- Android Compatibility Abstraction
-- Fail-Fast on Android Initialization Errors
-- Deterministic Android Setup
-- Clear Abstraction Over Android APIs
-- Composition over Inheritance for Android extensions
+- SigmaOS-activeandroid Abstraction
+- Fail-Fast on SigmaOS-activeandroid Initialization Errors
+- Deterministic SigmaOS-activeandroid Setup
+- Clear Abstraction Over SigmaOS-activeandroid APIs
+- Composition over Inheritance for SigmaOS-activeandroid extensions
 
 ## Architecture
-SigmaOS-activeandroid follows an Android compatibility pattern:
-- **Android Core**: Provides Android runtime emulation, API translation, and JNI bindings
-- **Application Framework**: Supports Android application component lifecycle and resource management
-- **System Integration**: Handles Android system services and native library loading
-- **Error Handling**: Fail-fast on invalid Android configurations or unsupported API levels
+SigmaOS-SigmaOS-activeandroid follows a SigmaOS-activeandroid pattern:
+- **SigmaOS-activeandroid Core**: Provides SigmaOS-activeandroid support, SigmaOS-activeandroid management, and SigmaOS-activeandroid tracking
+- **Management**: Supports SigmaOS-activeandroid management, SigmaOS-activeandroid configuration, and SigmaOS-activeandroid lifecycle
+- **Tracking**: Supports SigmaOS-activeandroid status, SigmaOS-activeandroid tracking, and SigmaOS-activeandroid lifecycle
+- **Error Handling**: Fail-fast on invalid SigmaOS-activeandroid configurations or unsupported SigmaOS-activeandroid types
 
 ## API
 The component provides the following public APIs:
-- `android::api::call(interface, method, args)` - Call an Android API method
-- `android::activity::launch(intent)` - Launch an Android activity
-- `android::package::install(path)` - Install an Android package
-- `android::status()` - Get Android compatibility status and version information
-- Error types for Android failure scenarios or unsupported API levels
+-  - Manage a SigmaOS-activeandroid by given configuration
+-  - Register a SigmaOS-activeandroid by given name
+-  - Get SigmaOS-activeandroid status and SigmaOS-activeandroid availability
+-  - Track SigmaOS-activeandroid management and SigmaOS-activeandroid tracking
+- Error types for SigmaOS-activeandroid failure scenarios or unsupported SigmaOS-activeandroid types
 
 ## Test Structure (Arrange-Act-ASSERT)
 All tests follow the AAA pattern:
-1. **Arrange**: Set up test environment with specific Android configuration
-2. **Act**: Execute the code under test (Android API call, activity launch)
-3. **Assert**: Verify the expected Android results
+1. **Arrange**: Set up test environment with specific SigmaOS-activeandroid configuration
+2. **Act**: Execute the code under test (SigmaOS-activeandroid init, SigmaOS-activeandroid management)
+3. **Assert**: Verify the expected SigmaOS-activeandroid results
 
 Example:
-```rust
-#[test]
-fn test_android_activity_launch_aaa() {
-    // Arrange
-    let intent = "android.intent.action.VIEW";
-    
-    // Act
-    let result = android::activity::launch(intent);
-    
-    // Assert
-    assert!(result.is_ok());
-    assert!(result.unwrap().is_running());
-}
-```
+
 
 ## Development
-- Follows Rust best practices with `#![forbid(unsafe_code)]`
-- Android initialization is best-effort; gracefully degrades on unsupported configurations
-- Comprehensive error types for all Android failure scenarios
-- Unit tests provided for API calls and activity management
-- Integration tests for full Android compatibility with actual Android applications
+- Follows Rust best practices with 
+- SigmaOS-activeandroid initialization is best-effort; gracefully degrades on unsupported configurations
+- Comprehensive error types for all SigmaOS-activeandroid failure scenarios
+- Unit tests provided for SigmaOS-activeandroid management and configuration
+- Integration tests for full SigmaOS-activeandroid system with actual SigmaOS-activeandroid integration
 
 ## TODO
-- Add support for additional Android API levels and system versions
-- Expand application framework capabilities (activity, service, broadcast receiver lifecycle)
-- Add native library loading and JNI binding features
-- Create integration tests with actual Android application execution
-- Implement Android preference and settings management
+- Add support for additional SigmaOS-activeandroid types
+- Expand SigmaOS-activeandroid capabilities (SigmaOS-activeandroid features, SigmaOS-activeandroid configurations, SigmaOS-activeandroid tracking)
+- Add lifecycle features (SigmaOS-activeandroid tracking, SigmaOS-activeandroid lifecycle, SigmaOS-activeandroid propagation)
+- Create integration tests with actual SigmaOS-activeandroid systems and SigmaOS-activeandroid integration
+- Implement SigmaOS-activeandroid persistence and SigmaOS-activeandroid state management
